@@ -21,8 +21,6 @@ const HomePage = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  console.log(cart, "home");
-
   //get all categories
   const getAllCategories = async () => {
     try {

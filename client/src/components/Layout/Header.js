@@ -13,9 +13,6 @@ const Header = () => {
   const categories = useCategory();
   const [auth, setAuth] = useAuth();
   const [cart] = useCart();
-  console.log(cart, "header");
-
-  console.log(cart?.length, "header");
 
   const handleLogout = () => {
     setAuth({
