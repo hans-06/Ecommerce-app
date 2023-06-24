@@ -2,6 +2,9 @@ import fs from "fs";
 import slugify from "slugify";
 import productModel from "../models/productModel.js";
 import categoryModel from "../models/categoryModel.js";
+import { instance } from "../server.js";
+import crypto from "crypto";
+import orderModel from "../models/orderModel.js";
 
 export const createProductController = async (req, res) => {
   try {
@@ -195,18 +198,17 @@ export const productFiltterController = async (req, res) => {
     const products = await productModel.find(args);
     res.status(200).send({
       success: true,
-      products
-    })
-    
+      products,
+    });
   } catch (error) {
     console.log(error);
-     res.status(500).send({
-       success: false,
-       message: "Error in product filter",
-       error,
-     });
+    res.status(500).send({
+      success: false,
+      message: "Error in product filter",
+      error,
+    });
   }
-}
+};
 
 //product count controller
 export const productCountController = async (req, res) => {
@@ -214,27 +216,31 @@ export const productCountController = async (req, res) => {
     const total = await productModel.find({}).estimatedDocumentCount();
     res.status(200).send({
       success: true,
-      total
-    })
+      total,
+    });
   } catch (error) {
     console.log(error);
     res.status(400).send({
       success: false,
-      message: 'Error in product count',
-      error
-    })
-    
+      message: "Error in product count",
+      error,
+    });
   }
-}
+};
 
 export const productListController = async (req, res) => {
   try {
     const perPage = 6;
     const page = req.params.page ? req.params.page : 1;
-    const products = await productModel.find({}).select('-photo').skip((page - 1) * perPage).limit(perPage).sort({ createdAt: -1 });
+    const products = await productModel
+      .find({})
+      .select("-photo")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
     res.status(200).send({
       success: true,
-      products
+      products,
     });
   } catch (error) {
     console.log(error);
@@ -244,17 +250,19 @@ export const productListController = async (req, res) => {
       error,
     });
   }
-}
+};
 
 export const searchProductController = async (req, res) => {
   try {
     const { keyword } = req.params;
-    const results = await productModel.find({
-      $or: [
-        { name: { $regex: keyword, $options: 'i' } },
-        { description: { $regex: keyword, $options: 'i' } }
-      ]
-    }).select('-photo');
+    const results = await productModel
+      .find({
+        $or: [
+          { name: { $regex: keyword, $options: "i" } },
+          { description: { $regex: keyword, $options: "i" } },
+        ],
+      })
+      .select("-photo");
     res.json(results);
   } catch (error) {
     console.log(error);
@@ -264,16 +272,19 @@ export const searchProductController = async (req, res) => {
       error,
     });
   }
-}
-
+};
 
 export const relatedProductController = async (req, res) => {
   try {
     const { pid, cid } = req.params;
-    const products = await productModel.find({
-      category: cid,
-      _id: {$ne: pid}
-    }).select('-photo').limit(3).populate("category")
+    const products = await productModel
+      .find({
+        category: cid,
+        _id: { $ne: pid },
+      })
+      .select("-photo")
+      .limit(3)
+      .populate("category");
     res.status(200).send({
       success: true,
       products,
@@ -286,7 +297,7 @@ export const relatedProductController = async (req, res) => {
       error,
     });
   }
-}
+};
 
 export const productCategoryController = async (req, res) => {
   try {
@@ -295,9 +306,8 @@ export const productCategoryController = async (req, res) => {
     res.status(200).send({
       success: true,
       category,
-      products
-
-    })
+      products,
+    });
   } catch (error) {
     console.log(error);
     res.status(400).send({
@@ -306,4 +316,150 @@ export const productCategoryController = async (req, res) => {
       error,
     });
   }
-}
+};
+
+// //razorpay payment checkout
+// export const paymentCheckoutController = async (req, res) => {
+//   try {
+//     const { cart, totalPrice } = req.body;
+     
+//     const options = {
+//       amount: Number(totalPrice*100), // amount in the smallest currency unit
+//       currency: "INR",
+//       order_receipt:'order_rcptid_11'
+//     };
+//     const order = await instance.orders.create(options);
+//     console.log(order);
+//     res.status(200).send({
+//       success: true,
+//       message: "order created successfully",
+//       order,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       success: false,
+//       message: "error in while creating razorpay order",
+//     });
+//   }
+// };
+
+// //razorpay payment verification
+// export const paymentVerificationController = async (req, res) => {
+//   try {
+//     const { order_id, razorpay_payment_id, razorpay_signature } = req.body;
+//     generated_signature = hmac_sha256(
+//       order_id + "|" + razorpay_payment_id,
+//       process.env.RAZORPAY_API_SECRET
+//     );
+
+//     const isAuthentic = generated_signature === razorpay_signature;
+//     if (isAuthentic) {
+//       const order = await new orderModel({
+//         products: cart,
+//         payment: isAuthentic,
+//         buyer: req.user._id,
+//       }).save();
+//       res.json({ ok: true });
+//     }
+//     // res.redirect(
+//     //   `http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`
+//     // );
+    
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       success: false,
+//       message: "error while verifying payment"
+//     });
+//   }
+// };
+
+export const getKeyController = async (req, res) => {
+  try {
+    res.status(200).json({ key: process.env.RAZORPAY_API_KEY });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error while getting key"
+    })
+  }
+  
+};
+
+
+export const paymentCheckoutController = async (req, res) => {
+  try {
+    const options = {
+      amount: Number(req.body.total)*100,
+      currency: "INR",
+    };
+    const order = await instance.orders.create(options);
+    console.log(order);
+
+    res.status(200).json({
+      success: true,
+      message: "order created successfully",
+      order,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "error in while creating razorpay order",
+    });
+  }
+  
+};
+
+export const paymentVerificationController = async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature} =
+      req.body;
+    // const { userId} = req.params;
+    let cart = req.cookies.cart;
+    let auth = JSON.parse(req.cookies.auth);
+
+    // console.log(JSON.parse(cart));
+    // console.log(cart);
+    // console.log(auth.user._id);
+    
+    // console.log(user);
+    // console.log(req.cookies);
+
+    // console.log(auth);
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_API_SECRET)
+      .update(body.toString())
+      .digest("hex");
+    // console.log(req.body.auth.user.name);
+    // console.log(userId);
+
+    const isAuthentic = expectedSignature === razorpay_signature;
+    if (isAuthentic) {
+      const order = await new orderModel({
+        products: JSON.parse(cart),
+        payment: isAuthentic,
+        buyer: auth.user._id,
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+      }).save();
+      res.clearCookie("cart");
+      res.redirect(`${process.env.NODE_APP_API}/dashboard/user/orders`);
+    } else {
+      res.status(400).json({
+        success: false,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "error while verifying payment"
+    });
+  }
+};

@@ -1,6 +1,6 @@
 import express from "express";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
-import { createProductController, deleteProductController, getProductController, getSingleProductController, productCategoryController, productCountController, productFiltterController, productListController, productPhotoController, relatedProductController, searchProductController, updateProductController } from './../controllers/productController.js';
+import { createProductController, deleteProductController, getKeyController, getProductController, getSingleProductController, paymentCheckoutController, paymentVerificationController, productCategoryController, productCountController, productFiltterController, productListController, productPhotoController, relatedProductController, searchProductController, updateProductController } from './../controllers/productController.js';
 import formidable from "express-formidable";
 
 const router = express.Router();
@@ -59,5 +59,10 @@ router.get("/related-product/:pid/:cid", relatedProductController);
 
 //category wise Product
 router.get("/product-category/:slug", productCategoryController);
+
+//razorpay payment checkout
+router.post("/checkout", requireSignIn, paymentCheckoutController);
+router.post("/verification", paymentVerificationController);
+router.get("/getKey", getKeyController);
 
 export default router;

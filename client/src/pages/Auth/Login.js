@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../../styles/AuthStyles.css";
 import { useAuth } from "../../context/Auth";
 import { NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ const Login = () => {
           user: res.data.user,
           token: res.data.token,
         });
-        localStorage.setItem("auth", JSON.stringify(res.data));
+        Cookies.set("auth", JSON.stringify(res.data));
         navigate(location.state || "/");
       } else {
         toast.error(res.data.message);

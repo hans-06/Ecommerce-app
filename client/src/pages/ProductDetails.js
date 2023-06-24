@@ -59,17 +59,17 @@ const ProductDetails = () => {
           <h6>{product.name}</h6>
           <h6>{product.description}</h6>
           <h6>
-            {product?.price?.toLocaleString("en-US", {
+            {product?.price?.toLocaleString("en-IN", {
               style: "currency",
-              currency: "USD",
+              currency: "INR",
             })}
           </h6>
           <h6>{product?.category?.name}</h6>
           <botton class="btn btn-secondary ms-1">Add to cart</botton>
         </div>
       </div>
-      <div className="row container similar-products">
-        <h1>Similar products ➡️</h1>
+      <div className="row container m-3 similar-products">
+        <h1>Similar products ➡️ </h1>
         {relatedProducts.length < 1 && (
           <p className="text-center">No similar products found</p>
         )}

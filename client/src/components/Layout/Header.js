@@ -6,20 +6,25 @@ import useCategory from "../../hooks/useCategory";
 import { useCart } from "../../context/Cart";
 import { Badge } from "antd";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 
 const Header = () => {
   const categories = useCategory();
   const [auth, setAuth] = useAuth();
   const [cart] = useCart();
+  console.log(cart, "header");
+
+  console.log(cart?.length, "header");
+
   const handleLogout = () => {
     setAuth({
       ...auth,
       user: null,
       token: "",
     });
-    localStorage.removeItem("auth");
-    toast.success("Logout Successfully");
+    Cookies.remove("auth");
+    toast.success("Logout Successfully"); 
   };
   return (
     <>
@@ -38,7 +43,7 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
             <Link to="/" className="navbar-brand">
-              Prolific Tech
+              shopify
             </Link>
             <div className="mx-auto">
               <SearchInput />

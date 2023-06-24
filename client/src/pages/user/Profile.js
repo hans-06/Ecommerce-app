@@ -4,6 +4,7 @@ import Layout from "../../components/Layout/Layout";
 import { useAuth } from "../../context/Auth";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const Profile = () => {
   const [auth, setAuth] = useAuth();
@@ -32,10 +33,10 @@ const Profile = () => {
         toast.error(data?.error);
       } else {
         setAuth({ ...auth, user: data?.updatedUser });
-        let ls = localStorage.getItem("auth");
+        let ls = Cookies.get("auth");
         ls = JSON.parse(ls);
         ls.user = data?.updatedUser;
-        localStorage.setItem('auth', JSON.stringify(ls));
+        Cookies.set('auth', JSON.stringify(ls));
         toast.success("Profile updated successfully");
       }
     } catch (error) {

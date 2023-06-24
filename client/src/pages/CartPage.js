@@ -1,30 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout/Layout";
 import { useCart } from "../context/Cart";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/Auth";
 import "../styles/CartStyles.css";
+import axios from "axios";
+// import { instance } from "../../../server";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 
 const CartPage = () => {
   const [auth, setAuth] = useAuth();
   const [cart, setCart] = useCart();
-    const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  // const [id, setId] = useState([]);
+  const navigate = useNavigate();
 
-    //total price
-    const totalPrice = () => {
-        try {
-            let total = 0;
-            cart?.map(item => {
-                total = total + item.price;
-            });
-            return total.toLocaleString("en-IN", {
-              style: "currency",
-              currency: "INR",
-            });
-        } catch (error) {
-            console.log(error);
-        }
+  console.log(cart, "cartPage");
+  // window.onload = function () {
+  //   console.log("onload");
+  //   setCart(Cookies.get("cart"));
+  // }
+  // useEffect(() => {
+  //   console.log("onload");
+  //   setCart(Cookies.get("cart"));
+  // }, []);
+  // setCart(Cookies.get("cart"));
+
+  //total price
+  const totalPrice = () => {
+    try {
+      let total = 0;
+      cart?.map((item) => {
+        total = total + item.price;
+      });
+      return total.toLocaleString("en-IN", {
+        style: "currency",
+        currency: "INR",
+      });
+    } catch (error) {
+      console.log(error);
     }
+  };
 
   //delete item from cart
   const removeCartItem = (pid) => {
@@ -33,11 +50,90 @@ const CartPage = () => {
       let index = myCart.findIndex((item) => item._id === pid);
       myCart.splice(index, 1);
       setCart(myCart);
-      localStorage.setItem("cart", JSON.stringify(myCart));
+      Cookies.set("cart", JSON.stringify(myCart));
     } catch (error) {
       console.log(error);
     }
   };
+
+  const checkoutHandler = async () => {
+    try {
+      setLoading(true);
+      // const totalPrice = totalPrice();
+      let total = 0;
+      cart?.map((i) => {
+        total = total + i.price;
+        // setId(i.id);
+      });
+
+      const {
+        data: { key },
+      } = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/getKey`);
+      const {
+        data: { order },
+      } = await axios.post(
+        `${process.env.REACT_APP_API}/api/v1/product/checkout`,
+        {
+          total,
+        }
+      );
+      // Cookies.set("cart", "cart");
+      if (order) {
+        const options = {
+          key, // Enter the Key ID generated from the Dashboard
+          amount: Number(order.amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+          currency: "INR",
+          name: auth?.user?.name,
+          description: "Test Transaction",
+          image: "http://example.com/your_logo",
+          order_id: order.id,
+          callback_url: `${process.env.REACT_APP_API}/api/v1/product/verification`,
+          prefill: {
+            name: auth?.user?.name,
+            email: auth?.user?.email,
+            contact: auth?.user?.phone,
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+        const razor = await new window.Razorpay(options);
+        razor.on("payment.failed", function (response) {
+          toast.error("payment failed");
+        });
+        razor.open();
+        setLoading(false);
+        // Cookies.set("cart", "cart")
+        // Cookies.remove("cart");
+        setCart([]);
+        toast.success("Payment Completed Successfully ");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  // const setOrder = async () => {
+  //   try {
+  //     const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/verificaton`, {
+  //       cart,
+  //       auth
+  //     });
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (auth?.token) setOrder();
+  // }, [auth?.token]);
+
   return (
     <Layout>
       <div className="cart-page">
@@ -131,6 +227,23 @@ const CartPage = () => {
                   </div>
                 </>
               )}
+              <div className="mt-2">
+                {!cart?.length ? (
+                  ""
+                ) : (
+                  <>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        checkoutHandler();
+                      }}
+                      disabled={loading || !auth?.user?.address}
+                    >
+                      {loading ? "Processing ...." : "Make Payment"}
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

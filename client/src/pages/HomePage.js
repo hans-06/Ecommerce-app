@@ -8,6 +8,7 @@ import { Prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/Cart";
 import "../styles/HomePage.css";
+import Cookies from "js-cookie";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const HomePage = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  console.log(cart, "home");
 
   //get all categories
   const getAllCategories = async () => {
@@ -136,7 +139,7 @@ const HomePage = () => {
                 key={c._id}
                 onChange={(e) => handleFilter(e.target.checked, c._id)}
               >
-                {c.name}
+              {c.name}
               </Checkbox>
             ))}
           </div>
@@ -195,7 +198,7 @@ const HomePage = () => {
                       class="btn btn-dark ms-1"
                       onClick={() => {
                         setCart([...cart, p]);
-                        localStorage.setItem(
+                        Cookies.set(
                           "cart",
                           JSON.stringify([...cart, p])
                         );

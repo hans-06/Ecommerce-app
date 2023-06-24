@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import orderModel from "../models/orderModel.js";
 import { comparePassword, hashPassword } from './../helpers/authHelper.js';
 import JWT from 'jsonwebtoken';
 
@@ -86,7 +87,7 @@ export const loginController = async (req, res) => {
                 message: 'Invalid Password'
             })
         }
-        const token = await JWT.sign({ _id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' })
+        const token = await JWT.sign({ _id: user.id }, process.env.JWT_SECRET, { expiresIn: '7d' });
         
         res.status(200).send({
             success: true,
@@ -188,3 +189,53 @@ export const updateProfileController = async (req, res) => {
         });
     }
 }
+
+export const getOrdersController = async (req, res) => {
+    try {
+        const orders = await orderModel.find({ buyer: req.user._id }).populate("products", "-photo").populate("buyer", "name");
+        res.json(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: true,
+            message: "Error while getting orders",
+            error
+        })
+        
+    }
+}
+
+export const getAllOrdersController = async (req, res) => {
+    try {
+        const orders = await orderModel.find({}).populate("products", "-photo").populate("buyer", "name").sort({createdAt: "-1"});
+        res.json(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: true,
+            message: "Error while getting orders",
+            error
+        })
+        
+    }
+}
+
+export const orderStatusController = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const orders = await orderModel.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+    res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error While Updateing Order",
+      error,
+    });
+  }
+};
