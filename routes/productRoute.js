@@ -62,7 +62,11 @@ router.get("/product-category/:slug", productCategoryController);
 
 //razorpay payment checkout
 router.post("/checkout", requireSignIn, paymentCheckoutController);
+
+//razorpay payment verifiacation
 router.post("/verification", paymentVerificationController);
+
+//getting dashboard key
 router.get("/getKey", getKeyController);
 
 export default router;

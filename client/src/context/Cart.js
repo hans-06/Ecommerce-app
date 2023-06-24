@@ -1,10 +1,7 @@
 import { useContext, useState, createContext, useEffect } from "react";
 import Cookies from "js-cookie";
-// import Cookies from "universal-cookie";
 
 const CartContext = createContext();
-
-// const cookies = new Cookies();
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);

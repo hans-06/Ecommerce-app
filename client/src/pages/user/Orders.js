@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import UserMenu from '../../components/Layout/UserMenu';
-import Layout from '../../components/Layout/Layout';
-import { useAuth } from '../../context/Auth';
-import axios from 'axios';
-import moment from 'moment';
+import React, { useEffect, useState } from "react";
+import UserMenu from "../../components/Layout/UserMenu";
+import Layout from "../../components/Layout/Layout";
+import { useAuth } from "../../context/Auth";
+import axios from "axios";
+import moment from "moment";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -11,16 +11,18 @@ const Orders = () => {
 
   const getOrders = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/auth/orders`);
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/auth/orders`
+      );
       setOrders(data);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     if (auth?.token) getOrders();
-  }, [auth?.token])
+  }, [auth?.token]);
   return (
     <Layout title={"Your Orders"}>
       <div className="contaier-fluid m-3 p-3 dashboard">
@@ -42,17 +44,17 @@ const Orders = () => {
                     <th scope="col">Quantity</th>
                   </tr>
                 </thead>
-            {orders.map((o, i) => {
-              return (
-                <tbody>
-                  <tr>
-                    <td>{i + 1}</td>
-                    <td>{o?.status}</td>
-                    <td>{o?.buyer?.name}</td>
-                    <td>{moment(o?.createAt).fromNow()}</td>
-                    <td>{o?.payment ? "Success" : "Failed"}</td>
-                    <td>{o?.products?.length}</td>
-                  </tr>
+                {orders.map((o, i) => {
+                  return (
+                    <tbody>
+                      <tr>
+                        <td>{i + 1}</td>
+                        <td>{o?.status}</td>
+                        <td>{o?.buyer?.name}</td>
+                        <td>{moment(o?.createAt).fromNow()}</td>
+                        <td>{o?.payment ? "Success" : "Failed"}</td>
+                        <td>{o?.products?.length}</td>
+                      </tr>
                       <div className="container">
                         {o?.products?.map((p, i) => (
                           <div
@@ -76,19 +78,16 @@ const Orders = () => {
                           </div>
                         ))}
                       </div>
-                </tbody>
-              );
-            })}
-                    </table>
-                </div>
-            
-            {/* </table> */}
-            {/* </div> */}
+                    </tbody>
+                  );
+                })}
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </Layout>
   );
-}
+};
 
-export default Orders
+export default Orders;

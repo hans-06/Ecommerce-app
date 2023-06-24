@@ -16,17 +16,6 @@ const CartPage = () => {
   // const [id, setId] = useState([]);
   const navigate = useNavigate();
 
-  console.log(cart, "cartPage");
-  // window.onload = function () {
-  //   console.log("onload");
-  //   setCart(Cookies.get("cart"));
-  // }
-  // useEffect(() => {
-  //   console.log("onload");
-  //   setCart(Cookies.get("cart"));
-  // }, []);
-  // setCart(Cookies.get("cart"));
-
   //total price
   const totalPrice = () => {
     try {
@@ -59,11 +48,9 @@ const CartPage = () => {
   const checkoutHandler = async () => {
     try {
       setLoading(true);
-      // const totalPrice = totalPrice();
       let total = 0;
       cart?.map((i) => {
         total = total + i.price;
-        // setId(i.id);
       });
 
       const {
@@ -77,10 +64,9 @@ const CartPage = () => {
           total,
         }
       );
-      // Cookies.set("cart", "cart");
       if (order) {
         const options = {
-          key, // Enter the Key ID generated from the Dashboard
+          key, 
           amount: Number(order.amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
           currency: "INR",
           name: auth?.user?.name,
@@ -106,8 +92,6 @@ const CartPage = () => {
         });
         razor.open();
         setLoading(false);
-        // Cookies.set("cart", "cart")
-        // Cookies.remove("cart");
         setCart([]);
         toast.success("Payment Completed Successfully ");
       } else {
@@ -118,21 +102,6 @@ const CartPage = () => {
       setLoading(false);
     }
   };
-
-  // const setOrder = async () => {
-  //   try {
-  //     const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/verificaton`, {
-  //       cart,
-  //       auth
-  //     });
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (auth?.token) setOrder();
-  // }, [auth?.token]);
 
   return (
     <Layout>
