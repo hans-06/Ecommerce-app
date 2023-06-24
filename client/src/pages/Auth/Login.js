@@ -40,7 +40,7 @@ const Login = () => {
     }
   };
   return (
-    <Layout title="Register - prolific Tech">
+    <Layout title="Register - Laventa">
       <div className="form-container" style={{ minHeight: "90vh" }}>
         <form onSubmit={handleSubmit}>
           <h4 className="title">LOGIN</h4>
@@ -82,7 +82,9 @@ const Login = () => {
           </button>
           <h6 className="text-center mt-3">
             NEW USER? &nbsp;
-            <NavLink to="/register" className="register-btn">REGISTER</NavLink>
+            <NavLink to="/register" className="register-btn">
+              REGISTER
+            </NavLink>
           </h6>
         </form>
       </div>

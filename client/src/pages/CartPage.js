@@ -66,7 +66,7 @@ const CartPage = () => {
       );
       if (order) {
         const options = {
-          key, 
+          key,
           amount: Number(order.amount), // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
           currency: "INR",
           name: auth?.user?.name,
@@ -104,7 +104,7 @@ const CartPage = () => {
   };
 
   return (
-    <Layout>
+    <Layout title={"Cart - Laventa"}>
       <div className="cart-page">
         <div className="row">
           <div className="col-md-12">

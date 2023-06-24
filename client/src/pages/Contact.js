@@ -1,10 +1,10 @@
-import React from 'react'
-import Layout from '../components/Layout/Layout'
+import React from "react";
+import Layout from "../components/Layout/Layout";
 import { BiMailSend, BiPhoneCall, BiSupport } from "react-icons/bi";
 
 const Contact = () => {
   return (
-    <Layout title={"Contact us"}>
+    <Layout title={"Contact Us - Laventa"}>
       <div className="row register ">
         <div className="col-md-6 ">
           <img
@@ -32,6 +32,6 @@ const Contact = () => {
       </div>
     </Layout>
   );
-}
+};
 
-export default Contact
+export default Contact;

@@ -5,13 +5,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/AuthStyles.css";
 
-
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -26,12 +25,12 @@ const ForgotPassword = () => {
         toast.error(res.data.message);
       }
     } catch (error) {
-        console.log(error);
-        toast.error("something went wrong");
+      console.log(error);
+      toast.error("something went wrong");
     }
   };
   return (
-    <Layout title={"forgot password - prolific Tech"}>
+    <Layout title={"forgot password - Laventa"}>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
           <h4 className="title">RESET PASSWORD</h4>
@@ -68,9 +67,9 @@ const ForgotPassword = () => {
               required
             />
           </div>
-            <button type="submit" className="btn btn-primary ">
-              RESET
-            </button>
+          <button type="submit" className="btn btn-primary ">
+            RESET
+          </button>
         </form>
       </div>
     </Layout>

@@ -40,7 +40,7 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
             <Link to="/" className="navbar-brand">
-              shopify
+              Laventa
             </Link>
             <div className="mx-auto">
               <SearchInput />

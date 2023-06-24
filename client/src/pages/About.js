@@ -1,9 +1,9 @@
-import React from 'react'
-import Layout from '../components/Layout/Layout'
+import React from "react";
+import Layout from "../components/Layout/Layout";
 
 const About = () => {
   return (
-    <Layout title={"About us - Prolific Tech"}>
+    <Layout title={"About us - Laventa"}>
       <div className="row register ">
         <div className="col-md-6 ">
           <img
@@ -25,6 +25,6 @@ const About = () => {
       </div>
     </Layout>
   );
-}
+};
 
-export default About
+export default About;

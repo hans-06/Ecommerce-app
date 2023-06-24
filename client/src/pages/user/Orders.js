@@ -24,7 +24,7 @@ const Orders = () => {
     if (auth?.token) getOrders();
   }, [auth?.token]);
   return (
-    <Layout title={"Your Orders"}>
+    <Layout title={"Dashboard - Your Orders"}>
       <div className="contaier-fluid m-3 p-3 dashboard">
         <div className="row">
           <div className="col-md-3">

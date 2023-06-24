@@ -7,12 +7,12 @@ import axios from "axios";
 const CategoryProducts = () => {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
-    const params = useParams();
-    const navigate = useNavigate();
+  const params = useParams();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (params?.slug) getProductByCat();
-    }, [params?.slug]);
+  useEffect(() => {
+    if (params?.slug) getProductByCat();
+  }, [params?.slug]);
 
   const getProductByCat = async () => {
     try {
@@ -26,7 +26,7 @@ const CategoryProducts = () => {
     }
   };
   return (
-    <Layout>
+    <Layout title={"Products - Laventa"}>
       <div className="container mt-3 category">
         <h4 className="text-center">Category - {category?.name}</h4>
         <h6 className="text-center">{products?.length} result found </h6>

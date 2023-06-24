@@ -186,14 +186,14 @@ const HomePage = () => {
                     {p.description.substring(0, 60)}...
                   </p>
                   <div className="card-name-price">
-                    <botton
-                      class="btn btn-info ms-1"
+                    <button
+                      className="btn btn-info ms-1"
                       onClick={() => navigate(`/product/${p.slug}`)}
                     >
                       See details
-                    </botton>
-                    <botton
-                      class="btn btn-dark ms-1"
+                    </button>
+                    <button
+                      className="btn btn-dark ms-1"
                       onClick={() => {
                         setCart([...cart, p]);
                         Cookies.set(
@@ -204,7 +204,7 @@ const HomePage = () => {
                       }}
                     >
                       Add to cart
-                    </botton>
+                    </button>
                   </div>
                 </div>
               </div>

@@ -1,48 +1,48 @@
-import React, { useEffect, useState } from 'react'
-import Layout from '../components/Layout/Layout'
-import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
+import React, { useEffect, useState } from "react";
+import Layout from "../components/Layout/Layout";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 import "../styles/ProductDetailsStyles.css";
 
 const ProductDetails = () => {
-    const params = useParams();
-    const navigate = useNavigate();
-    const [product, setProduct] = useState({});
-    const [relatedProducts, setRelatedProducts] = useState([]);
+  const params = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState({});
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
-    useEffect(() => {
-        if (params?.slug) getProduct();
-    },[params?.slug])
+  useEffect(() => {
+    if (params?.slug) getProduct();
+  }, [params?.slug]);
 
-    const getProduct = async () => {
-        try {
-            const { data } = await axios.get(
-              `${process.env.REACT_APP_API}/api/v1/product/single-product/${params.slug}`
-            );
-            setProduct(data?.product)
-            getSimilarProducts(data?.product._id, data?.product.category._id)
-        } catch (error) {
-            console.log(error);
-            toast.error("something went wrong");
-        }
+  const getProduct = async () => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/single-product/${params.slug}`
+      );
+      setProduct(data?.product);
+      getSimilarProducts(data?.product._id, data?.product.category._id);
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
     }
+  };
 
-    //get similar products
+  //get similar products
 
-    const getSimilarProducts = async (pid, cid) => {
-        try {
-            const { data } = await axios.get(
-              `${process.env.REACT_APP_API}/api/v1/product/related-product/${pid}/${cid}`
-            );
-            setRelatedProducts(data?.products)
-        } catch (error) {
-            console.log(error)
-            toast.error("something went wrong");
-        }
+  const getSimilarProducts = async (pid, cid) => {
+    try {
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/related-product/${pid}/${cid}`
+      );
+      setRelatedProducts(data?.products);
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
     }
+  };
   return (
-    <Layout>
+    <Layout title={"Product Details - Laventa"}>
       <div className="row container product-details">
         <div className="col-md-6">
           <img
@@ -108,6 +108,6 @@ const ProductDetails = () => {
       </div>
     </Layout>
   );
-}
+};
 
-export default ProductDetails
+export default ProductDetails;

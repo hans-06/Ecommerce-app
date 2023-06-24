@@ -1,12 +1,12 @@
-import React from 'react'
-import Layout from './../../components/Layout/Layout';
-import UserMenu from '../../components/Layout/UserMenu';
-import { useAuth } from '../../context/Auth';
+import React from "react";
+import Layout from "./../../components/Layout/Layout";
+import UserMenu from "../../components/Layout/UserMenu";
+import { useAuth } from "../../context/Auth";
 
 const Dashboard = () => {
   const [auth] = useAuth();
   return (
-    <Layout title={"Dashboard - Prolific Tech"}>
+    <Layout title={"Dashboard - Laventa"}>
       <div className="contaier-fluid m-3 p-3 dashboard">
         <div className="row">
           <div className="col-md-3">
@@ -24,6 +24,6 @@ const Dashboard = () => {
       </div>
     </Layout>
   );
-}
+};
 
-export default Dashboard
+export default Dashboard;

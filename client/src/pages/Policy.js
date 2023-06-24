@@ -1,9 +1,9 @@
-import React from 'react'
-import Layout from '../components/Layout/Layout'
+import React from "react";
+import Layout from "../components/Layout/Layout";
 
 const Policy = () => {
   return (
-    <Layout title={"Privacy Policy"}>
+    <Layout title={"Privacy Policy - Laventa"}>
       <div className="row register mt-6">
         <div className="col-md-6 ">
           <img
@@ -24,6 +24,6 @@ const Policy = () => {
       </div>
     </Layout>
   );
-}
+};
 
-export default Policy
+export default Policy;

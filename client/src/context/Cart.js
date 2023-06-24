@@ -5,7 +5,6 @@ const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  console.log(cart, "cart");
     
     useEffect(() => {
       let existingCartItem = Cookies.get("cart");    
